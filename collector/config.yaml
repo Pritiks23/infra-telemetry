@@ -1,0 +1,12 @@
+collection_interval: 10
+
+database:
+  sqlite:
+    enabled: true
+    path: data/telemetry.db
+
+  postgres:
+    enabled: false
+
+  mysql:
+    enabled: false

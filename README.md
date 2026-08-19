@@ -1,6 +1,6 @@
 
 
-1) Python Collector
+## 1) Python Collector
 collector.py
 
 The main program:
@@ -33,8 +33,7 @@ It installs and configures the collector so that the collector can run reliably.
 
 
 
-2
-. System Information Collection
+## 2 System Information Collection
 linux.py
 
 Responsible for gathering Linux-level information.
@@ -64,7 +63,7 @@ Linux OS
       linux.py
 
 
-  3) Metric Normalization
+  ## 3) Metric Normalization
 metrics.py
 
 Converts raw system information into a consistent structure.
@@ -96,7 +95,7 @@ standard telemetry model
 This makes database storage and visualization easier.
 
 
-4)Database.py
+## 4)Database.py
 
 The database layer abstracts storage away from the collector.
 
@@ -116,7 +115,7 @@ This is a useful software engineering pattern:
 
 The collector doesn't need to know the implementation details of each database.
 
-5) SQLite
+## 5) SQLite
 
 SQLite stores the data locally:
 
@@ -141,7 +140,7 @@ samples
 -------
 14
 
-6) PostgreSQL
+## 6) PostgreSQL
 
 PostgreSQL runs inside Docker:
 
@@ -162,7 +161,7 @@ samples
 -------
 6
 
-7) MySQL
+## 7) MySQL
 
 MySQL also runs inside Docker:
 
@@ -182,7 +181,7 @@ We verified:
 samples
 -------
 6
-8) Why Multiple Databases?
+## 8) Why Multiple Databases?
 
 This was useful as an infrastructure engineering exercise.
 
@@ -201,7 +200,7 @@ Application logic
 Storage implementation
 
 
-9) Ansible
+## 9) Ansible
 
 Ansible became the deployment automation layer.
 
@@ -221,7 +220,7 @@ ansible-playbook ansible/playbooks/collector.yml
 
 Ansible performs those operations automatically.
 
-10) Ansible Inventory
+## 10) Ansible Inventory
 
 The inventory defines which machines Ansible manages.
 
@@ -242,7 +241,7 @@ Ansible Controller
 
 The same role could eventually be deployed to many Linux servers.
 
-11)Ansible Role
+## 11)Ansible Role
 
 Our role:
 
@@ -267,7 +266,7 @@ Initialize database
        ↓
 Install systemd service
 
-12) Idempotency
+## 12) Idempotency
 
 One of the biggest Ansible concepts learned.
 
@@ -299,7 +298,7 @@ Only make necessary changes
 
 This is idempotent infrastructure automation.
 
-13) We eventually deployed a dedicated virtual environment:
+## 13) We eventually deployed a dedicated virtual environment:
 
 /opt/infra-telemetry/venv/
 
@@ -315,7 +314,7 @@ The collector should therefore run with:
 
 rather than relying on whatever Python packages happen to exist in the Codespace.
 
-14) systemd
+## 14) systemd
 
 We created a systemd service:
 
@@ -351,7 +350,7 @@ startup behavior
 
 This is much closer to how a production Linux service would be deployed.
 
-15) Docker Compose
+## 15) Docker Compose
 
 Docker Compose manages the supporting infrastructure:
 
@@ -370,7 +369,7 @@ docker compose ps
 
 and saw all four containers running.
 
-16) 20. Prometheus
+## 16) 20. Prometheus
 
 Prometheus is the metrics monitoring system.
 
@@ -383,8 +382,7 @@ Long-term application/data storage
 Prometheus:
 
 Time-series metrics collection
-17)
-22. Grafana
+## 17) Grafana
 
 Grafana is the visualization layer.
 

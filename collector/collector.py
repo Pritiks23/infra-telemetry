@@ -1,11 +1,19 @@
 import time
+from pathlib import Path
+
+import yaml
 
 from linux import collect_system_info
 from metrics import normalize_system_metrics
 from database import save_metrics
 
 
-COLLECTION_INTERVAL = 10
+CONFIG_PATH = Path(__file__).parent / "config.yaml"
+
+
+def load_config():
+    with open(CONFIG_PATH) as file:
+        return yaml.safe_load(file)
 
 
 def collect_once():
@@ -24,13 +32,17 @@ def collect_once():
 
 
 def main():
+    config = load_config()
+
+    collection_interval = config["collection_interval"]
+
     print("Starting infrastructure telemetry collector...")
-    print(f"Collection interval: {COLLECTION_INTERVAL} seconds")
+    print(f"Collection interval: {collection_interval} seconds")
 
     while True:
         try:
             collect_once()
-            time.sleep(COLLECTION_INTERVAL)
+            time.sleep(collection_interval)
 
         except KeyboardInterrupt:
             print("\nCollector stopped.")
@@ -38,7 +50,7 @@ def main():
 
         except Exception as error:
             print(f"Collector error: {error}")
-            time.sleep(COLLECTION_INTERVAL)
+            time.sleep(collection_interval)
 
 
 if __name__ == "__main__":

@@ -35,15 +35,25 @@ Docker Compose taught me how multiple infrastructure components can be brought u
 
 The actual pipeline was:
 
-Linux host
-   │
-   ▼
-Python Collector
-   │
-   ├──► SQLite
-   │
-   ├──► PostgreSQL ─────────► Grafana
-   │
-   └──► MySQL
+             ┌───────────────┐
+             │  Linux Host   │
+             │ CPU/RAM/Disk  │
+             └───────┬───────┘
+                     │
+                     ▼
+             ┌───────────────┐
+             │ Python        │
+             │ Collector     │
+             └───────┬───────┘
+                     │
+          ┌──────────┼──────────┐
+          ▼          ▼          ▼
+      SQLite     PostgreSQL    MySQL
+                     │
+                     ▼
+                  Grafana
+                     │
+                     ▼
+                Dashboards
 
 Specifically, your collector/database.py contained save_postgres() and save_mysql(), so every collection cycle wrote the CPU, memory, disk, and load data into those databases.

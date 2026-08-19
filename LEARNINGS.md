@@ -29,3 +29,21 @@ I learned how systemd turns the Python collector from a manually executed progra
 Docker and Docker Compose
 
 Docker Compose taught me how multiple infrastructure components can be brought up as a single environment. PostgreSQL, MySQL, Prometheus, and Grafana were each represented as containers with their own images, configuration, ports, and persistent volumes. Compose created the shared network that allowed the services to communicate using service names. I learned that containers provide isolation and reproducibility, while volumes allow important data to survive container recreation. The docker compose ps command became a simple way to verify whether the infrastructure components were actually running.
+
+
+## The Grafana visualization I built came from PostgreSQL directly, not Prometheus.
+
+The actual pipeline was:
+
+Linux host
+   │
+   ▼
+Python Collector
+   │
+   ├──► SQLite
+   │
+   ├──► PostgreSQL ─────────► Grafana
+   │
+   └──► MySQL
+
+Specifically, your collector/database.py contained save_postgres() and save_mysql(), so every collection cycle wrote the CPU, memory, disk, and load data into those databases.

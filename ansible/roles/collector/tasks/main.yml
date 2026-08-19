@@ -1,0 +1,72 @@
+---
+- name: Create collector directory
+  ansible.builtin.file:
+    path: /opt/infra-telemetry
+    state: directory
+    mode: "0755"
+
+- name: Create collector data directory
+  ansible.builtin.file:
+    path: /opt/infra-telemetry/data
+    state: directory
+    mode: "0755"
+
+- name: Install Python runtime dependencies
+  ansible.builtin.apt:
+    name:
+      - python3-venv
+      - python3-pip
+      - sqlite3
+    state: present
+    update_cache: true
+
+- name: Create collector virtual environment
+  ansible.builtin.command:
+    cmd: python3 -m venv /opt/infra-telemetry/venv
+    creates: /opt/infra-telemetry/venv/bin/python
+
+- name: Install collector Python dependencies
+  ansible.builtin.command:
+    cmd: /opt/infra-telemetry/venv/bin/pip install PyYAML psycopg2-binary mysql-connector-python
+
+- name: Deploy collector Python files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/opt/infra-telemetry/{{ item }}"
+    mode: "0755"
+  loop:
+    - collector.py
+    - linux.py
+    - metrics.py
+    - database.py
+
+- name: Deploy collector configuration
+  ansible.builtin.copy:
+    src: config.yaml
+    dest: /opt/infra-telemetry/config.yaml
+    mode: "0644"
+
+- name: Deploy SQLite schema
+  ansible.builtin.copy:
+    src: schema.sql
+    dest: /opt/infra-telemetry/schema.sql
+    mode: "0644"
+
+- name: Initialize SQLite database
+  ansible.builtin.shell:
+    cmd: sqlite3 /opt/infra-telemetry/data/telemetry.db < /opt/infra-telemetry/schema.sql
+    creates: /opt/infra-telemetry/data/.initialized
+  args:
+    executable: /bin/bash
+
+- name: Mark SQLite database initialized
+  ansible.builtin.file:
+    path: /opt/infra-telemetry/data/.initialized
+    state: touch
+    mode: "0644"
+
+- name: Install systemd service
+  ansible.builtin.template:
+    src: infra-telemetry.service.j2
+    dest: /etc/systemd/system/infra-telemetry.service
+    mode: "0644"

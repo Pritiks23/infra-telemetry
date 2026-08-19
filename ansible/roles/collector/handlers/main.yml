@@ -1,0 +1,6 @@
+---
+- name: Restart telemetry collector
+  ansible.builtin.systemd_service:
+    name: infra-telemetry
+    state: restarted
+    daemon_reload: true

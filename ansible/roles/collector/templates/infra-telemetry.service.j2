@@ -1,0 +1,14 @@
+[Unit]
+Description=Infrastructure Telemetry Collector
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/infra-telemetry/venv/bin/python /opt/infra-telemetry/collector.py
+WorkingDirectory=/opt/infra-telemetry
+Environment=TELEMETRY_DB_PATH=/opt/infra-telemetry/data/telemetry.db
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

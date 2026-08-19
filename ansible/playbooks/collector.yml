@@ -1,0 +1,7 @@
+---
+- name: Deploy infrastructure telemetry collector
+  hosts: collector
+  become: true
+
+  roles:
+    - collector

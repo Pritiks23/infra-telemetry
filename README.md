@@ -86,6 +86,17 @@ It installs and configures the collector so that the collector can run reliably.
 
 
 
+                         Linux
+                           │
+              ┌────────────┼────────────┐
+              │            │            │
+              ▼            ▼            ▼
+          /proc/stat   /proc/meminfo  /proc/loadavg
+              │            │            │
+              ▼            ▼            ▼
+             CPU          RAM          Load
+
+
 ## 2 System Information Collection
 linux.py
 

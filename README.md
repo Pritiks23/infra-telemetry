@@ -1,4 +1,7 @@
 
+Infrastructure Telemetry Project — How It Works
+
+This project is an infrastructure monitoring pipeline that collects CPU, memory, disk, and system information from a Linux machine, stores that telemetry in multiple databases, exposes metrics for Prometheus, and visualizes the data in Grafana. Ansible is responsible for deploying and configuring the collector on the host, while Docker Compose runs the supporting observability infrastructure such as PostgreSQL, MySQL, Prometheus, and Grafana. The collector runs Python code that reads Linux system information, normalizes it into consistent metrics, and writes the results to SQLite, PostgreSQL, and MySQL. Prometheus can then scrape metrics exposed by the collector, and Grafana connects to Prometheus or PostgreSQL to turn the collected data into dashboards and time-series visualizations. The overall flow is: Linux host → Python telemetry collector → databases / Prometheus → Grafana dashboard, with Ansible automating deployment and Docker Compose managing the monitoring services.
 
 ## 1) Python Collector
 collector.py
